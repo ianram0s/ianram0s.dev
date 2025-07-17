@@ -2,6 +2,10 @@
   "name": "ianbytes-com",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.10.0",
+	"engines": {
+		"node": ">=22.0.0"
+	},
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
