@@ -2,10 +2,9 @@
 export interface Props {
 	commandNumber: number;
 	commandText: string;
-	outputHtml: string;
 }
 
-const { commandNumber, outputHtml } = Astro.props;
+const { commandNumber } = Astro.props;
 ---
 
 <div class="space-y-2" id={`command-${commandNumber}`} style="display: none;">
@@ -22,6 +21,7 @@ const { commandNumber, outputHtml } = Astro.props;
 		class="ml-4"
 		id={`command-${commandNumber}-output`}
 		style="display: none;"
-		set:html={outputHtml}
-	/>
+	>
+		<slot />
+	</div>
 </div>

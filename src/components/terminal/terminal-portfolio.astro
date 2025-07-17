@@ -1,23 +1,11 @@
 ---
-import TerminalBackground from "./background.astro";
-import TerminalHeader from "./header.astro";
-import TerminalCommands from "./commands.astro";
+import Background from "./background.astro";
+import Header from "./header.astro";
+import { Commands, commands } from "../commands";
 ---
 
-<script>
-    const commands = [
-        { text: "whoami", delay: 800 },
-        { text: "status --portfolio", delay: 1200 },
-        { text: "current_project --show", delay: 1500 },
-        { text: "download --resume", delay: 1000 },
-        { text: "connect --social", delay: 1000 },
-    ];
-
-    function typeText(
-        element: HTMLElement,
-        text: string,
-        speed: number = 100,
-    ): Promise<void> {
+<script define:vars={{ commands }} is:inline>
+    function typeText(element, text, speed = 100) {
         return new Promise((resolve) => {
             let i = 0;
             const timer = setInterval(() => {
@@ -31,21 +19,18 @@ import TerminalCommands from "./commands.astro";
         });
     }
 
-    async function simulateTerminal(): Promise<void> {
-        // Show the first command immediately (no initial delay)
+    async function simulateTerminal() {
         const firstCommandDiv = document.getElementById("command-1");
         if (firstCommandDiv) {
             firstCommandDiv.style.display = "block";
         }
 
-        // Start typing after a short delay
-        await new Promise<void>((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
         for (let i = 0; i < commands.length; i++) {
             const commandNum = i + 1;
             const command = commands[i];
 
-            // If this isn't the first command, show it now
             if (i > 0) {
                 const commandDiv = document.getElementById(
                     `command-${commandNum}`,
@@ -53,29 +38,25 @@ import TerminalCommands from "./commands.astro";
                 if (commandDiv) {
                     commandDiv.style.display = "block";
                 }
-                await new Promise<void>((resolve) => setTimeout(resolve, 500));
+                await new Promise((resolve) => setTimeout(resolve, 500));
             }
 
-            // Type the command text
             const textElement = document.getElementById(
                 `command-${commandNum}-text`,
             );
             if (textElement) {
-                await typeText(textElement, command.text, 80);
+                await typeText(textElement, command.commandText, 80);
             }
 
-            // Keep cursor blinking for a moment after typing
-            await new Promise<void>((resolve) => setTimeout(resolve, 300));
+            await new Promise((resolve) => setTimeout(resolve, 300));
 
-            // Hide the cursor to simulate "enter" being pressed
             const cursor = document.getElementById(`cursor-${commandNum}`);
             if (cursor) {
                 cursor.style.display = "none";
             }
 
-            await new Promise<void>((resolve) => setTimeout(resolve, 200));
+            await new Promise((resolve) => setTimeout(resolve, 200));
 
-            // Show the command output
             const output = document.getElementById(
                 `command-${commandNum}-output`,
             );
@@ -83,13 +64,27 @@ import TerminalCommands from "./commands.astro";
                 output.style.display = "block";
             }
 
-            // Wait before next command
-            await new Promise<void>((resolve) =>
-                setTimeout(resolve, command.delay),
-            );
+            if (i < commands.length - 1) {
+                const intermediatePrompt = document.getElementById(
+                    `intermediate-prompt-${commandNum}`,
+                );
+                if (intermediatePrompt) {
+                    intermediatePrompt.style.display = "flex";
+                }
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, command.delay));
+
+            if (i < commands.length - 1) {
+                const intermediatePrompt = document.getElementById(
+                    `intermediate-prompt-${commandNum}`,
+                );
+                if (intermediatePrompt) {
+                    intermediatePrompt.style.display = "none";
+                }
+            }
         }
 
-        // Show final prompt with blinking cursor
         const finalPrompt = document.getElementById("final-prompt");
         if (finalPrompt) {
             finalPrompt.style.display = "flex";
@@ -102,18 +97,16 @@ import TerminalCommands from "./commands.astro";
 <div
     class="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center p-4 overflow-hidden"
 >
-    <TerminalBackground />
+    <Background />
 
     <div class="relative z-10 max-w-4xl w-full">
-        <!-- Terminal Window -->
         <div
             class="bg-gray-900 rounded-lg shadow-2xl border border-gray-700 overflow-hidden"
         >
-            <TerminalHeader />
+            <Header />
 
-            <!-- Terminal Content -->
             <div class="p-8">
-                <TerminalCommands />
+                <Commands />
             </div>
         </div>
     </div>
