@@ -1,0 +1,27 @@
+---
+export interface Props {
+	commandNumber: number;
+	commandText: string;
+	outputHtml: string;
+}
+
+const { commandNumber, outputHtml } = Astro.props;
+---
+
+<div class="space-y-2" id={`command-${commandNumber}`} style="display: none;">
+	<div class="flex items-center space-x-2">
+		<span class="text-green-400">$</span>
+		<span class="text-white" id={`command-${commandNumber}-text`}></span>
+		<div
+			class="w-2 h-5 bg-green-400 cursor-blink"
+			id={`cursor-${commandNumber}`}
+		>
+		</div>
+	</div>
+	<div
+		class="ml-4"
+		id={`command-${commandNumber}-output`}
+		style="display: none;"
+		set:html={outputHtml}
+	/>
+</div>

@@ -1,0 +1,1 @@
+export { default as TerminalPortfolio } from './terminal-portfolio.astro';

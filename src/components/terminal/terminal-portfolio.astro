@@ -1,0 +1,137 @@
+---
+import TerminalBackground from "./background.astro";
+import TerminalHeader from "./header.astro";
+import TerminalCommands from "./commands.astro";
+---
+
+<script>
+    const commands = [
+        { text: "whoami", delay: 800 },
+        { text: "status --portfolio", delay: 1200 },
+        { text: "current_project --show", delay: 1500 },
+        { text: "download --resume", delay: 1000 },
+        { text: "connect --social", delay: 1000 },
+    ];
+
+    function typeText(
+        element: HTMLElement,
+        text: string,
+        speed: number = 100,
+    ): Promise<void> {
+        return new Promise((resolve) => {
+            let i = 0;
+            const timer = setInterval(() => {
+                element.textContent += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, speed);
+        });
+    }
+
+    async function simulateTerminal(): Promise<void> {
+        // Show the first command immediately (no initial delay)
+        const firstCommandDiv = document.getElementById("command-1");
+        if (firstCommandDiv) {
+            firstCommandDiv.style.display = "block";
+        }
+
+        // Start typing after a short delay
+        await new Promise<void>((resolve) => setTimeout(resolve, 800));
+
+        for (let i = 0; i < commands.length; i++) {
+            const commandNum = i + 1;
+            const command = commands[i];
+
+            // If this isn't the first command, show it now
+            if (i > 0) {
+                const commandDiv = document.getElementById(
+                    `command-${commandNum}`,
+                );
+                if (commandDiv) {
+                    commandDiv.style.display = "block";
+                }
+                await new Promise<void>((resolve) => setTimeout(resolve, 500));
+            }
+
+            // Type the command text
+            const textElement = document.getElementById(
+                `command-${commandNum}-text`,
+            );
+            if (textElement) {
+                await typeText(textElement, command.text, 80);
+            }
+
+            // Keep cursor blinking for a moment after typing
+            await new Promise<void>((resolve) => setTimeout(resolve, 300));
+
+            // Hide the cursor to simulate "enter" being pressed
+            const cursor = document.getElementById(`cursor-${commandNum}`);
+            if (cursor) {
+                cursor.style.display = "none";
+            }
+
+            await new Promise<void>((resolve) => setTimeout(resolve, 200));
+
+            // Show the command output
+            const output = document.getElementById(
+                `command-${commandNum}-output`,
+            );
+            if (output) {
+                output.style.display = "block";
+            }
+
+            // Wait before next command
+            await new Promise<void>((resolve) =>
+                setTimeout(resolve, command.delay),
+            );
+        }
+
+        // Show final prompt with blinking cursor
+        const finalPrompt = document.getElementById("final-prompt");
+        if (finalPrompt) {
+            finalPrompt.style.display = "flex";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", simulateTerminal);
+</script>
+
+<div
+    class="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center p-4 overflow-hidden"
+>
+    <TerminalBackground />
+
+    <div class="relative z-10 max-w-4xl w-full">
+        <!-- Terminal Window -->
+        <div
+            class="bg-gray-900 rounded-lg shadow-2xl border border-gray-700 overflow-hidden"
+        >
+            <TerminalHeader />
+
+            <!-- Terminal Content -->
+            <div class="p-8">
+                <TerminalCommands />
+            </div>
+        </div>
+    </div>
+</div>
+
+<style is:global>
+    .cursor-blink {
+        animation: cursor-blink 1s infinite;
+    }
+
+    @keyframes cursor-blink {
+        0%,
+        50% {
+            opacity: 1;
+        }
+        51%,
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
