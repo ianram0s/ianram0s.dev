@@ -1,7 +1,7 @@
 ---
-import Background from "./background.astro";
-import Header from "./header.astro";
-import { Commands, commands } from "../commands";
+import Background from './background.astro';
+import Header from './header.astro';
+import { Commands, commands } from '../commands';
 ---
 
 <script define:vars={{ commands }} is:inline>
@@ -20,9 +20,9 @@ import { Commands, commands } from "../commands";
     }
 
     async function simulateTerminal() {
-        const firstCommandDiv = document.getElementById("command-1");
+        const firstCommandDiv = document.getElementById('command-1');
         if (firstCommandDiv) {
-            firstCommandDiv.style.display = "block";
+            firstCommandDiv.style.display = 'block';
         }
 
         await new Promise((resolve) => setTimeout(resolve, 800));
@@ -32,18 +32,14 @@ import { Commands, commands } from "../commands";
             const command = commands[i];
 
             if (i > 0) {
-                const commandDiv = document.getElementById(
-                    `command-${commandNum}`,
-                );
+                const commandDiv = document.getElementById(`command-${commandNum}`);
                 if (commandDiv) {
-                    commandDiv.style.display = "block";
+                    commandDiv.style.display = 'block';
                 }
                 await new Promise((resolve) => setTimeout(resolve, 500));
             }
 
-            const textElement = document.getElementById(
-                `command-${commandNum}-text`,
-            );
+            const textElement = document.getElementById(`command-${commandNum}-text`);
             if (textElement) {
                 await typeText(textElement, command.commandText, 80);
             }
@@ -52,57 +48,47 @@ import { Commands, commands } from "../commands";
 
             const cursor = document.getElementById(`cursor-${commandNum}`);
             if (cursor) {
-                cursor.style.display = "none";
+                cursor.style.display = 'none';
             }
 
             await new Promise((resolve) => setTimeout(resolve, 200));
 
-            const output = document.getElementById(
-                `command-${commandNum}-output`,
-            );
+            const output = document.getElementById(`command-${commandNum}-output`);
             if (output) {
-                output.style.display = "block";
+                output.style.display = 'block';
             }
 
             if (i < commands.length - 1) {
-                const intermediatePrompt = document.getElementById(
-                    `intermediate-prompt-${commandNum}`,
-                );
+                const intermediatePrompt = document.getElementById(`intermediate-prompt-${commandNum}`);
                 if (intermediatePrompt) {
-                    intermediatePrompt.style.display = "flex";
+                    intermediatePrompt.style.display = 'flex';
                 }
             }
 
             await new Promise((resolve) => setTimeout(resolve, command.delay));
 
             if (i < commands.length - 1) {
-                const intermediatePrompt = document.getElementById(
-                    `intermediate-prompt-${commandNum}`,
-                );
+                const intermediatePrompt = document.getElementById(`intermediate-prompt-${commandNum}`);
                 if (intermediatePrompt) {
-                    intermediatePrompt.style.display = "none";
+                    intermediatePrompt.style.display = 'none';
                 }
             }
         }
 
-        const finalPrompt = document.getElementById("final-prompt");
+        const finalPrompt = document.getElementById('final-prompt');
         if (finalPrompt) {
-            finalPrompt.style.display = "flex";
+            finalPrompt.style.display = 'flex';
         }
     }
 
-    document.addEventListener("DOMContentLoaded", simulateTerminal);
+    document.addEventListener('DOMContentLoaded', simulateTerminal);
 </script>
 
-<div
-    class="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center p-4 overflow-hidden"
->
+<div class="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center p-4 overflow-hidden">
     <Background />
 
     <div class="relative z-10 max-w-4xl w-full">
-        <div
-            class="bg-gray-900 rounded-lg shadow-2xl border border-gray-700 overflow-hidden"
-        >
+        <div class="bg-gray-900 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
             <Header />
 
             <div class="p-8">

@@ -1,1 +1,1 @@
-export { default as Commands, commands } from "./commands.astro";
+export { default as Commands, commands } from './commands.astro';

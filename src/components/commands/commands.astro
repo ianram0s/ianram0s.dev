@@ -1,39 +1,39 @@
 ---
-import Command from "../terminal/command.astro";
-import WhoAmI from "./whoami.astro";
-import StatusPortfolio from "./status-portfolio.astro";
-import CurrentProject from "./current-project.astro";
-import DownloadResume from "./download-resume.astro";
-import ConnectSocial from "./connect-social.astro";
+import Command from '../terminal/command.astro';
+import WhoAmI from './whoami.astro';
+import StatusPortfolio from './status-portfolio.astro';
+import CurrentProject from './current-project.astro';
+import DownloadResume from './download-resume.astro';
+import ConnectSocial from './connect-social.astro';
 
 export const commands = [
     {
         commandNumber: 1,
-        commandText: "whoami",
+        commandText: 'whoami',
         delay: 800,
         component: WhoAmI,
     },
     {
         commandNumber: 2,
-        commandText: "status --portfolio",
+        commandText: 'status --portfolio',
         delay: 1200,
         component: StatusPortfolio,
     },
     {
         commandNumber: 3,
-        commandText: "current_project --show",
+        commandText: 'current_project --show',
         delay: 1500,
         component: CurrentProject,
     },
     {
         commandNumber: 4,
-        commandText: "download --resume",
+        commandText: 'download --resume',
         delay: 1000,
         component: DownloadResume,
     },
     {
         commandNumber: 5,
-        commandText: "connect --social",
+        commandText: 'connect --social',
         delay: 1000,
         component: ConnectSocial,
     },
@@ -45,13 +45,10 @@ export const commands = [
     {
         commands.map((command) => (
             <>
-                <Command
-                    commandNumber={command.commandNumber}
-                    commandText={command.commandText}
-                >
+                <Command commandNumber={command.commandNumber} commandText={command.commandText}>
                     <command.component />
                 </Command>
-                
+
                 {/* Add intermediate prompt after each command except the last one */}
                 {command.commandNumber < commands.length && (
                     <div
@@ -60,7 +57,7 @@ export const commands = [
                         style="display: none;"
                     >
                         <span class="text-green-400">$</span>
-                        <div class="w-2 h-5 bg-green-400 cursor-blink"></div>
+                        <div class="w-2 h-5 bg-green-400 cursor-blink" />
                     </div>
                 )}
             </>
@@ -68,11 +65,7 @@ export const commands = [
     }
 
     <!-- Final cursor -->
-    <div
-        class="flex items-center space-x-2"
-        id="final-prompt"
-        style="display: none;"
-    >
+    <div class="flex items-center space-x-2" id="final-prompt" style="display: none;">
         <span class="text-green-400">$</span>
         <div class="w-2 h-5 bg-green-400 cursor-blink"></div>
     </div>
